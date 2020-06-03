@@ -1,0 +1,37 @@
+﻿@model MotorInsuranceCalculator.Models.PolicyDetailsViewModel
+
+@{
+    ViewBag.Title = "Enter policy details";
+}
+
+<div class="jumbotron">
+    <h1>Enter policy details</h1>
+</div>
+
+@using (Html.BeginForm("CalculatePremium", "Home", FormMethod.Post))
+{
+    <div class="row">
+        @Html.LabelFor(x => x.PolicyStartDate)
+        @Html.TextBoxFor(x => x.PolicyStartDate)
+        @Html.ValidationMessageFor(x => x.PolicyStartDate, "", new { @class="text-danger"})
+    </div>
+    <div class="row">
+        @Html.LabelFor(x => x.DriverName)
+        @Html.TextBoxFor(x => x.DriverName)
+        @Html.ValidationMessageFor(x => x.DriverName, "", new { @class="text-danger"})
+    </div>
+    <div class="row">
+        @Html.LabelFor(x => x.DriverOccupationID)
+        @Html.DropDownListFor(x => x.DriverOccupationID, Model.Occupations)
+        @Html.ValidationMessageFor(x => x.DriverOccupationID, "", new { @class="text-danger"})
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(x => x.DriverDateOfBirth)
+        @Html.TextBoxFor(x => x.DriverDateOfBirth)
+        @Html.ValidationMessageFor(x => x.DriverDateOfBirth, "", new { @class="text-danger"})
+    </div>
+    <div class="row">
+        <button type="submit" class="btn btn-success">Calculate Premium</button>
+    </div>
+}
