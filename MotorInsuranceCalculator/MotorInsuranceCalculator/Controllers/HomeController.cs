@@ -19,24 +19,29 @@ namespace MotorInsuranceCalculator.Controllers
         [HttpPost]
         public ActionResult CalculatePremium(PolicyDetailsViewModel model)
         {
+            //Validate inputs
             if(!ModelState.IsValid)
             {
+                //return index with populated valued and error messages
                 model.Occupations = GetOccupations();
                 return View("Index", model);
             }
 
             var driverAge = GetDriverAgeAtPolicyStartDate((DateTime)model.DriverDateOfBirth, (DateTime)model.PolicyStartDate);
-            var policyDeclined = CheckIfPolicyDeclined((DateTime)model.PolicyStartDate, driverAge);
-            if (!string.IsNullOrEmpty(policyDeclined))
+            var declineReason = CheckIfPolicyDeclined((DateTime)model.PolicyStartDate, driverAge);
+
+            //return policy declined if declineReason exists
+            if (!string.IsNullOrEmpty(declineReason))
             {
                 var policyDeclinedModel = new PolicyDeclinedViewModel
                 {
-                    PolicyDeclinedReason = policyDeclined
+                    PolicyDeclinedReason = declineReason
                 };
 
                 return View("PolicyDeclined", policyDeclinedModel);
             }
 
+            //calculate premium
             var premiumCalculatedViewModel = new PremiumCalculatedViewModel();
             premiumCalculatedViewModel.Premium = CalculatePremium(model.DriverOccupationID, driverAge);
 
